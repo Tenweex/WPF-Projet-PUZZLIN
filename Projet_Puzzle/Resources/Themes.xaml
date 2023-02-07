@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Window_Background">#202020</Color>
+    <Color x:Key="Window_Border">#3a3a3a</Color>
+
+    <Color x:Key="Primary_Backgroud">#202020</Color>
+    <Color x:Key="Secondary_Backgroud">#282828</Color>
+    <Color x:Key="Tertiary_Backgroud">#2D2D2D</Color>
+
+    <Color x:Key="GradientColor1_000">#00BF76</Color>
+    <Color x:Key="GradientColor1_025">#00BF84</Color>
+    <Color x:Key="GradientColor1_050">#00BF95</Color>
+    <Color x:Key="GradientColor1_075">#00BFA6</Color>
+    <Color x:Key="GradientColor1_100">#00BFB2</Color>
+    
+    <Color x:Key="Primary_Foregroud">#FFFFFF</Color>
+
+
+    
+    <SolidColorBrush x:Key="Brush_Window_Background" Color="{StaticResource Window_Background}"/>
+    <SolidColorBrush x:Key="Brush_Window_Border" Color="{StaticResource Window_Border}"/>
+
+    <SolidColorBrush x:Key="Brush_Primary_Backgroud" Color="{StaticResource Primary_Backgroud}"/>
+    <SolidColorBrush x:Key="Brush_Secondary_Backgroud" Color="{StaticResource Secondary_Backgroud}"/>
+    <SolidColorBrush x:Key="Brush_Tertiary_Backgroud" Color="{StaticResource Tertiary_Backgroud}"/>
+    
+    <SolidColorBrush x:Key="Brush_Primary_Foregroud" Color="{StaticResource Primary_Foregroud}"/>
+
+    <SolidColorBrush x:Key="Brush_GradientColor1_000" Color="{StaticResource GradientColor1_000}"/>
+    <SolidColorBrush x:Key="Brush_GradientColor1_025" Color="{StaticResource GradientColor1_025}"/>
+    <SolidColorBrush x:Key="Brush_GradientColor1_050" Color="{StaticResource GradientColor1_050}"/>
+    <SolidColorBrush x:Key="Brush_GradientColor1_075" Color="{StaticResource GradientColor1_075}"/>
+    <SolidColorBrush x:Key="Brush_GradientColor1_100" Color="{StaticResource GradientColor1_100}"/>
+</ResourceDictionary>

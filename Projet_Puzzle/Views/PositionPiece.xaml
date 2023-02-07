@@ -1,0 +1,636 @@
+﻿<Page x:Class="Projet_Puzzle.Views.PositionPiece"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Projet_Puzzle.Views" 
+      xmlns:vm="clr-namespace:Projet_Puzzle.ViewModels" 
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:uc="clr-namespace:Projet_Puzzle.Controls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PositionPiece">
+
+    <Page.DataContext>
+        <vm:ViewModelPositionPiece/>
+    </Page.DataContext>
+
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SidePanel -->
+            <Border Width="285" CornerRadius="5">
+                <!-- Border style -->
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource GradientColor1_000}" Offset="0"/>
+                        <GradientStop Color="{StaticResource GradientColor1_100}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Border.Effect>
+                    <DropShadowEffect Opacity="0.2" BlurRadius="10" ShadowDepth="0"/>
+                </Border.Effect>
+
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ButtonResizeSidePanel, Path=IsChecked}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                             To="285" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                             To="35" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <!-- Border content -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="35"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- SidePanel button resize -->
+                    <Grid Grid.Column="1">
+                        <Path x:Name="IconResizeSidePanel"
+                              Stretch="Uniform" 
+                              Width="25" 
+                              Height="25" 
+                              Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                              Data="{StaticResource Icon_ResizeMenu}">
+
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="0"/>
+                            </Path.RenderTransform>
+
+                            <Path.RenderTransformOrigin>
+                                <Point X="0.5" Y="0.5"/>
+                            </Path.RenderTransformOrigin>
+
+                            <Path.Style>
+                                <Style TargetType="Path">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=ButtonResizeSidePanel, Path=IsChecked}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                                 From="0" To="180" Duration="0:0:0.2"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                                 From="180" To="360" Duration="0:0:0.2"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Path.Style>
+                        </Path>
+
+                        <ToggleButton x:Name="ButtonResizeSidePanel"
+                                      IsChecked="True">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid Background="Transparent"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                    </Grid>
+
+                    <!-- SidePanel content -->
+                    <Grid>
+                        <ScrollViewer Grid.Row="1" FlowDirection="RightToLeft" CanContentScroll="True">
+                            <Grid FlowDirection="LeftToRight">
+                                <!-- Bouton ajouter un dossier -->
+                                <Border Visibility="{Binding Property_SidePanelAddFolderButton_Visibility, UpdateSourceTrigger=PropertyChanged}">
+                                    <Grid>
+                                        <StackPanel Orientation="Vertical" 
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center">
+
+                                            <Path x:Name="IconAddFolder"
+                                                  Stretch="Uniform" 
+                                                  Width="50" 
+                                                  Height="50"
+                                                  Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                                                  Data="{StaticResource Icon_Add}"/>
+
+                                            <TextBlock Padding="0,10" FontSize="20"
+                                                       Foreground="{DynamicResource Brush_Primary_Foregroud}"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center"
+                                                       Text="Ajouter des pièces"/>
+
+                                            <TextBlock FontSize="12"
+                                                       MaxWidth="2130"
+                                                       Foreground="{DynamicResource Brush_Primary_Foregroud}" 
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center"
+                                                       Text="Toutes les pièces de puzzle doivent se trouver dans le même dossier"/>
+                                        </StackPanel>
+
+                                        <Button x:Name="ButtonAddFolder">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Grid Background="Transparent" Opacity="0.7"/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+
+                                            <Button.Triggers>
+                                                <EventTrigger RoutedEvent="MouseEnter">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="IconAddFolder"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="70"
+                                                                             Duration="0:0:0.2"/>
+
+                                                            <DoubleAnimation Storyboard.TargetName="IconAddFolder"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="70"
+                                                                             Duration="0:0:0.2"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="MouseLeave">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="IconAddFolder"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="50"
+                                                                             Duration="0:0:0.2"/>
+
+                                                            <DoubleAnimation Storyboard.TargetName="IconAddFolder"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="50"
+                                                                             Duration="0:0:0.2"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                            </Button.Triggers>
+
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding Command_ButtonAddFolder_Click}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Liste des pièces -->
+                                <StackPanel Visibility="{Binding Property_SidePanelPiecesList_Visibility, UpdateSourceTrigger=PropertyChanged}"
+                                            Orientation="Vertical" 
+                                            VerticalAlignment="Center" 
+                                            Margin="0,10">
+
+                                    <!-- Bouton changement de dossier -->
+                                    <Border Margin="3,3"
+                                            Height="50"
+                                            CornerRadius="10"
+                                            Background="{DynamicResource Brush_Tertiary_Backgroud}">
+                                        <Border.Effect>
+                                            <DropShadowEffect Opacity="0.8" BlurRadius="5" ShadowDepth="0"/>
+                                        </Border.Effect>
+
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center">
+
+                                                <Path x:Name="IconEditFolder"
+                                                      Stretch="Uniform" 
+                                                      Width="25" 
+                                                      Height="25"
+                                                      Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                                                      Data="{StaticResource Icon_OpenFolder}"/>
+
+                                                <TextBlock Padding="10,0,0,0" FontSize="18"
+                                                           Foreground="{DynamicResource Brush_Primary_Foregroud}"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Center"
+                                                           Text="Changer de dossier"/>
+                                            </StackPanel>
+
+                                            <Button x:Name="ButtonEditFolder">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Grid Background="Transparent" Opacity="0.7"/>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+
+                                                <Button.Triggers>
+                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="IconEditFolder"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="30"
+                                                                             Duration="0:0:0.2"/>
+
+                                                                <DoubleAnimation Storyboard.TargetName="IconEditFolder"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="30"
+                                                                             Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="IconEditFolder"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="25"
+                                                                             Duration="0:0:0.2"/>
+
+                                                                <DoubleAnimation Storyboard.TargetName="IconEditFolder"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="25"
+                                                                             Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Button.Triggers>
+
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction Command="{Binding Command_ButtonAddFolder_Click}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Liste des images -->
+                                    <ItemsControl ItemsSource="{Binding Property_ListOfPuzzlePieces, UpdateSourceTrigger=PropertyChanged}"
+                                                  VirtualizingPanel.IsVirtualizing="True">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,10"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- View content -->
+            <Grid Grid.Column="1" 
+                  Margin="5">
+
+                <!-- Bouton ajouter un fichier -->
+                <Border Visibility="{Binding Property_ContentAddFileButton_Visibility, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid>
+                        <StackPanel Orientation="Vertical" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center">
+
+                            <Path x:Name="IconAddFile"
+                                  Stretch="Uniform" 
+                                  Width="50" 
+                                  Height="50"
+                                  Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                                  Data="{StaticResource Icon_Add}"/>
+
+                            <TextBlock Padding="0,10" FontSize="20"
+                                       Foreground="{DynamicResource Brush_Primary_Foregroud}"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Text="Ajouter un puzzle"/>
+
+                            <TextBlock FontSize="12"
+                                       MaxWidth="500"
+                                       Foreground="{DynamicResource Brush_Primary_Foregroud}" 
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Text="Pour lancer le traitement, vous devez avoir sélectionné une pièce de puzzle dans l'onglet à gauche et ouvert le puzzle reconstitué"/>
+                        </StackPanel>
+
+                        <Button x:Name="ButtonAddFile">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="Transparent" Opacity="0.7"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="IconAddFile"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="70"
+                                                                             Duration="0:0:0.2"/>
+
+                                            <DoubleAnimation Storyboard.TargetName="IconAddFile"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="70"
+                                                                             Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="IconAddFile"
+                                                                             Storyboard.TargetProperty="Width"
+                                                                             To="50"
+                                                                             Duration="0:0:0.2"/>
+
+                                            <DoubleAnimation Storyboard.TargetName="IconAddFile"
+                                                                             Storyboard.TargetProperty="Height"
+                                                                             To="50"
+                                                                             Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Button.Triggers>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding Command_ButtonAddFile_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Puzzle et traitement -->
+                <Grid Visibility="{Binding Property_ContentTraitement_Visibility, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Image du puzzle -->
+                    <Border>
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.3" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+
+                        <Grid HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                            <Grid.OpacityMask>
+                                <VisualBrush Visual="{Binding ElementName=ImgPuzzleBorder}"/>
+                            </Grid.OpacityMask>
+
+                            <Border x:Name="ImgPuzzleBorder" CornerRadius="10" Background="{DynamicResource Brush_Tertiary_Backgroud}"/>
+
+                            <Image Source="{Binding Property_ImgPuzzle_ImageSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Boutons de navigation -->
+                    <Grid Grid.Row="1"
+                          Margin="10"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Bouton changement de fichier -->
+                        <Border Margin="10,3"
+                                Height="50"
+                                CornerRadius="10"
+                                Background="{DynamicResource Brush_Secondary_Backgroud}">
+                            <Border.Effect>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="5" ShadowDepth="0"/>
+                            </Border.Effect>
+
+                            <Grid>
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Margin="15,0">
+
+                                    <Path x:Name="IconEditFile"
+                                          Stretch="Uniform" 
+                                          Width="25" 
+                                          Height="25"
+                                          Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                                          Data="{StaticResource Icon_OpenFile}"/>
+
+                                    <TextBlock Padding="10,0,0,0" FontSize="18"
+                                               Foreground="{DynamicResource Brush_Primary_Foregroud}"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"
+                                               Text="Changer de puzzle"/>
+                                </StackPanel>
+
+                                <Button x:Name="ButtonEditFile">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Grid Background="Transparent" Opacity="0.7"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="IconEditFile"
+                                                                     Storyboard.TargetProperty="Width"
+                                                                     To="30"
+                                                                     Duration="0:0:0.2"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="IconEditFile"
+                                                                     Storyboard.TargetProperty="Height"
+                                                                     To="30"
+                                                                     Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="IconEditFile"
+                                                                     Storyboard.TargetProperty="Width"
+                                                                     To="25"
+                                                                     Duration="0:0:0.2"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="IconEditFile"
+                                                                     Storyboard.TargetProperty="Height"
+                                                                     To="25"
+                                                                     Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:InvokeCommandAction Command="{Binding Command_ButtonAddFile_Click}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <!-- Bouton lancer le traitement -->
+                        <Border Grid.Column="1" 
+                                Margin="10,3"
+                                Height="50"
+                                CornerRadius="10">
+
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="{StaticResource GradientColor1_000}" Offset="0"/>
+                                    <GradientStop Color="{StaticResource GradientColor1_050}" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+
+                            <Border.Effect>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="5" ShadowDepth="0"/>
+                            </Border.Effect>
+
+                            <Grid>
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Margin="15,0">
+
+                                    <Path x:Name="IconTraitement"
+                                          Stretch="Uniform" 
+                                          Width="25" 
+                                          Height="25"
+                                          Fill="{DynamicResource Brush_Primary_Foregroud}" 
+                                          Data="{StaticResource Icon_Processing}"/>
+
+                                    <TextBlock Padding="10,0,0,0" FontSize="18"
+                                               Foreground="{DynamicResource Brush_Primary_Foregroud}"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"
+                                               Text="Lancer le traitement"/>
+                                </StackPanel>
+
+                                <Button x:Name="ButtonTraitement">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Grid Background="Transparent" Opacity="0.7"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="IconTraitement"
+                                                                     Storyboard.TargetProperty="Width"
+                                                                     To="30"
+                                                                     Duration="0:0:0.2"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="IconTraitement"
+                                                                     Storyboard.TargetProperty="Height"
+                                                                     To="30"
+                                                                     Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="IconTraitement"
+                                                                     Storyboard.TargetProperty="Width"
+                                                                     To="25"
+                                                                     Duration="0:0:0.2"/>
+
+                                                    <DoubleAnimation Storyboard.TargetName="IconTraitement"
+                                                                     Storyboard.TargetProperty="Height"
+                                                                     To="25"
+                                                                     Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:InvokeCommandAction Command="{Binding Command_ButtonTraitement_Click}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid Visibility="{Binding Property_WaitingPanel_Visibility, UpdateSourceTrigger=PropertyChanged}">
+            <Border Grid.ColumnSpan="2" 
+                    Background="{DynamicResource Brush_Tertiary_Backgroud}" 
+                    Opacity="0.7">
+        </Border>
+            <TextBlock Text="Traitement en cours..."
+                       Foreground="{DynamicResource Brush_Primary_Foregroud}" FontSize="70"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+    </Grid>
+</Page>

@@ -5,26 +5,282 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projet_Puzzle" 
         xmlns:vm="clr-namespace:Projet_Puzzle.ViewModels"
+        xmlns:v="clr-namespace:Projet_Puzzle.Views"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:uc="clr-namespace:Projet_Puzzle.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        WindowStartupLocation="CenterScreen"
+        WindowState="{Binding Property_MainWindow_WindowState, UpdateSourceTrigger=PropertyChanged}"
         Background="Transparent"
-        Foreground="White"
-        Height="450" 
-        Width="800">
+        BorderBrush="{DynamicResource Brush_Window_Border}"
+        BorderThickness="1"
+        Foreground="{DynamicResource Brush_Primary_Foregroud}"
+        Height="600" 
+        Width="1200">
 
-    <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="MainWindow_WindowChrome"
-                      CaptionHeight="30"
-                      ResizeBorderThickness="8"
-                      GlassFrameThickness="-1"
-                      UseAeroCaptionButtons="True"/>
-    </WindowChrome.WindowChrome>
-    
     <Window.DataContext>
         <vm:ViewModelMainWindow />
     </Window.DataContext>
 
-    <Grid>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding Property_WindowChrome_CaptionHeight, UpdateSourceTrigger=PropertyChanged}"
+                      ResizeBorderThickness="{Binding Property_WindowChrome_ResizeBorderThickness, UpdateSourceTrigger=PropertyChanged}"
+                      GlassFrameThickness="-1"
+                      UseAeroCaptionButtons="True"/>
+    </WindowChrome.WindowChrome>
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="150"/>
+            <!-- Caption buttons approximative witdh -->
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <!-- Caption buttons approximative height -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="TitleBar" Background="{DynamicResource Brush_Window_Background}"/>
+        <Grid x:Name="Content" Background="{Binding ElementName=TitleBar, Path=Background}" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+        <!-- Content -->
+        <Grid x:Name="GridMain" Grid.RowSpan="2" Grid.ColumnSpan="2"
+              Margin="{Binding Property_GridMain_Margin, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding Property_GridMain_RowDefinition1, UpdateSourceTrigger=PropertyChanged}"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ButtonMainMenu -->
+                <Border WindowChrome.IsHitTestVisibleInChrome="True"
+                        Margin="7"
+                        CornerRadius="5"
+                        Background="{StaticResource Brush_Primary_Backgroud}">
+
+                    <Grid>
+
+                        <Path x:Name="IconMenu"
+                              Stretch="Uniform" 
+                              Width="16" 
+                              Height="16" 
+                              Fill="White" 
+                              Data="{StaticResource Icon_Menu}">
+                        </Path>
+
+                        <ToggleButton x:Name="ButtonMainMenu"
+                                      IsChecked="{Binding Property_ButtonMainMenu_IsChecked, UpdateSourceTrigger=PropertyChanged}">
+
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Grid Background="Transparent"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ToggleButton.Style>
+
+                            <ToggleButton.Triggers>
+                                <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="IconMenu" 
+                                                                 Storyboard.TargetProperty="Width" 
+                                                                 To="12" 
+                                                                 Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="PreviewMouseLeftButtonUp">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="IconMenu" 
+                                                                 Storyboard.TargetProperty="Width" 
+                                                                 To="16" 
+                                                                 Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </ToggleButton.Triggers>
+
+                        </ToggleButton>
+
+                    </Grid>
+
+                    <Border.Triggers>
+                        <EventTrigger RoutedEvent="ToggleButton.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                                To="{StaticResource Secondary_Backgroud}" 
+                                                Duration="0:0:0"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="ToggleButton.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                                To="{StaticResource Primary_Backgroud}" 
+                                                Duration="0:0:0"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Border.Triggers>
+
+                </Border>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <!-- Icon -->
+                    <Image Source="Resources/Images/logo.png"
+                           Margin="8,7"/>
+                    
+                    <!-- Title -->
+                    <TextBlock WindowChrome.IsHitTestVisibleInChrome="False"
+                               Text="PUZZL'IN"
+                               FontSize="18"
+                               VerticalAlignment="Center"
+                               Padding="5,0"/>
+                </StackPanel>
+
+            </Grid>
+
+            <!-- SidePanel -->
+            <Border Grid.Row="1" Width="250">
+                <!-- Border style -->
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ButtonMainMenu, Path=IsChecked}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                             To="250" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                             To="50" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <!-- Border content -->
+                <Grid WindowChrome.IsHitTestVisibleInChrome="True"
+                      Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <uc:UC_SidePanelButton x:Name="ButtonMenuAccueil" 
+                                          GroupName="SidePanelMainMenu"
+                                          IsChecked="True"
+                                          Icon="{StaticResource Icon_Home}"
+                                          Text="Accueil"/>
+
+                        <Border Margin="7,3"
+                            Height="1.5"
+                            Background="{StaticResource Brush_Tertiary_Backgroud}"/>
+
+                        <uc:UC_SidePanelButton x:Name="ButtonMenu1"
+                                          GroupName="SidePanelMainMenu"
+                                          Icon="{StaticResource Icon_Scan}"
+                                          Text="Position d'une pièce"/>
+
+                        <uc:UC_SidePanelButton x:Name="ButtonMenu2"
+                                          GroupName="SidePanelMainMenu"
+                                          Icon="{StaticResource Icon_Puzzle}"
+                                          Text="Résolution du puzzle"/>
+                    </StackPanel>
+
+                    <uc:UC_SidePanelButton x:Name="ButtonMenuParametres" 
+                                      Grid.Row="1"
+                                      GroupName="SidePanelMainMenu"
+                                      Icon="{StaticResource Icon_Parametre}"
+                                      Text="Paramètres"/>
+
+                    <i:Interaction.Triggers>
+                        <i:DataTrigger Binding="{Binding ElementName=ButtonMenuAccueil, Path=IsChecked}"
+                                   Value="True">
+                            <i:InvokeCommandAction Command="{Binding Command_ButtonsNavigation_IsChecked}"
+                                               CommandParameter="{Binding ElementName=ButtonMenuAccueil}"/>
+                        </i:DataTrigger>
+
+                        <i:DataTrigger Binding="{Binding ElementName=ButtonMenu1, Path=IsChecked}"
+                                   Value="True">
+                            <i:InvokeCommandAction Command="{Binding Command_ButtonsNavigation_IsChecked}"
+                                               CommandParameter="{Binding ElementName=ButtonMenu1}"/>
+                        </i:DataTrigger>
+
+                        <i:DataTrigger Binding="{Binding ElementName=ButtonMenu2, Path=IsChecked}"
+                                   Value="True">
+                            <i:InvokeCommandAction Command="{Binding Command_ButtonsNavigation_IsChecked}"
+                                               CommandParameter="{Binding ElementName=ButtonMenu2}"/>
+                        </i:DataTrigger>
+
+                        <i:DataTrigger Binding="{Binding ElementName=ButtonMenuParametres, Path=IsChecked}"
+                                       Value="True">
+                            <i:InvokeCommandAction Command="{Binding Command_ButtonsNavigation_IsChecked}"
+                                                   CommandParameter="{Binding ElementName=ButtonMenuParametres}"/>
+                        </i:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Grid>
+            </Border>
+
+            <!-- Content-->
+            <Border WindowChrome.IsHitTestVisibleInChrome="False"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Background="{DynamicResource Brush_Tertiary_Backgroud}">
+                <!-- Border style -->
+                <Border.CornerRadius>
+                    <CornerRadius TopLeft="8"/>
+                </Border.CornerRadius>
+
+                <Border.Effect>
+                    <DropShadowEffect Opacity="0.05" BlurRadius="5" ShadowDepth="0"/>
+                </Border.Effect>
+
+                <!-- Border Content -->
+                <Grid Margin="5">
+                    <Frame x:Name="FrameAccueil"
+                           Visibility="{Binding Property_FrameAccueil_Visibility, UpdateSourceTrigger=PropertyChanged}"
+                           Source="Views/Accueil.xaml"/>
+                    <Frame x:Name="FramePositionPiece" 
+                           Visibility="{Binding Property_FramePositionPiece_Visibility, UpdateSourceTrigger=PropertyChanged}"
+                           Source="Views/PositionPiece.xaml"/>
+                    <Frame x:Name="FrameResolutioPuzzle" 
+                           Visibility="{Binding Property_FrameResolutioPuzzle_Visibility, UpdateSourceTrigger=PropertyChanged}"
+                           Source="Views/ResolutionPuzzle.xaml"/>
+                    <Frame x:Name="FrameParametres" 
+                           Visibility="{Binding Property_FrameParametres_Visibility, UpdateSourceTrigger=PropertyChanged}"
+                           Source="Views/Parametres.xaml"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
